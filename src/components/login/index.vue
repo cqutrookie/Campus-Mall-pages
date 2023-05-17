@@ -2,14 +2,14 @@
     <video autoplay loop muted="none">
         <source src="../login/video/background.mp4" type="video/mp4">
     </video>
-    <div class="left" @click="jumptologin" @mouseenter="(e)=>enter(e,'b1')" @mouseleave="leave">
+    <div class="left" @click="jumptologin1" @mouseenter="(e)=>enter(e,'b1')" @mouseleave="leave">
         <div class="show1" >
-            <a href=""><h1>Sign in</h1></a>
+            <a ><h1>Sign in</h1></a>
         </div>
     </div>
-    <div class="midleft" @mouseenter="(e)=>enter(e,'b2')" @mouseleave="leave">
+    <div class="midleft" @click="jumptologin2" @mouseenter="(e)=>enter(e,'b2')" @mouseleave="leave">
         <div class="show2" >
-            <a href="../login/login.vue"><h1>Sign up</h1></a>
+            <a ><h1>Sign up</h1></a>
         </div>
     </div>
     <div class="midright"  @mouseenter="(e)=>enter(e,'b3')" @mouseleave="leave">
@@ -34,8 +34,11 @@ const leave = (e)=>{
   e.target.style.backgroundImage = 'url("")'
   e.target.childNodes[0].style.display = 'none'
 }
-function jumptologin(){
+function jumptologin1(){
     router.push('/login')
+}
+function jumptologin2(){
+    router.push('/register')
 }
     
 

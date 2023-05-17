@@ -4,14 +4,15 @@
     </video>
     <div id="login">
       <div id="login-form" @keyup.enter="inputInfo">
-        <h1>登陆界面</h1>
+        <h1>用户注册</h1>
+        <label for="username"><i class="el-icon-user-solid" style="color: #c1c1c1"></i></label>
+        <input type="text" placeholder="昵称" name="name" id="name" autocapitalize="off" v-model.trim=name aria-autocomplete="off">
         <label for="username"><i class="el-icon-user-solid" style="color: #c1c1c1"></i></label>
         <input type="text" placeholder="用户名" name="username" id="username" autocapitalize="off" v-model.trim=username aria-autocomplete="off">
         <label for="password"><i class="el-icon-right" style="color: #c1c1c1"></i></label>
         <input type="password" placeholder="密码" name="password" id="password" autocapitalize="off" v-model.trim="password">
         <div>
-          <el-button type="primary" v-on:click="inputInfo">登录</el-button>
-          <el-button type="info"  @click="open2" v-on:click="resetInfo">重置</el-button>
+          <el-button type="primary" v-on:click="inputInfo">注册</el-button>
         </div>
       </div>
     </div>
@@ -19,14 +20,15 @@
   
   <script>
   import { ElButton,ElNotification  } from 'element-plus'
-  import {login} from "@/api/user/user"
+  import {register} from "@/api/user/register"
   export default {
-    name: "UserLogin",
+    name: "Userregister",
     components: {
       ElButton
     },
     data: function () {
       return {
+        name : '',
         username: '',
         password: '',
       }
@@ -34,30 +36,31 @@
     methods: {
       inputInfo: function () {
         var params = {};
+        params.name=this.name;
         params.username=this.username;
         params.password=this.password;
         
-        login(params).then(res => {
+        register(params).then(res => {
           console.log(res.data);
-          if (res.data.CODE === '1') {
+          if (res.data.CODE === '01') {
               ElNotification({
                 title: 'Success',
-                message: '登录成功 请稍等...',
+                message: '注册成功 为你跳转到登录页面登录',
                 type: 'success',
               });
               this.$router.push({
-                path: '/register'
+                path: '/login'
               })
           } else {
             ElNotification.error({
-              title: '用户名或者密码错误',
+              title: '账号已被注册',
               message: res.data.msg
             })
           }
         }).catch(res => {
           ElNotification({
             title: 'Error',
-            message: '用户名或者密码错误',
+            message: '账号已被注册',
             type: 'error',
           });
         })
