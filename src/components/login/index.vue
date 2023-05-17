@@ -2,28 +2,48 @@
     <video autoplay loop muted="none">
         <source src="../login/video/background.mp4" type="video/mp4">
     </video>
-    <div class="left" id="left">
-        <div class="show1" id="show1">
+    <div class="left" @click="jumptologin" @mouseenter="(e)=>enter(e,'b1')" @mouseleave="leave">
+        <div class="show1" >
             <a href=""><h1>Sign in</h1></a>
         </div>
     </div>
-    <div class="midleft" id="midleft">
-        <div class="show2" id="show2">
-            <a href="#"><h1>Sign up</h1></a>
+    <div class="midleft" @mouseenter="(e)=>enter(e,'b2')" @mouseleave="leave">
+        <div class="show2" >
+            <a href="../login/login.vue"><h1>Sign up</h1></a>
         </div>
     </div>
-    <div class="midright" id="midright">
-        <div class="show3" id="show3">
+    <div class="midright"  @mouseenter="(e)=>enter(e,'b3')" @mouseleave="leave">
+        <div class="show3" >
             <a href="#"><h1>Feedback</h1></a>
         </div>
     </div>
-    <div class="right" id="right">
-        <div class="show4" id="show4">
+    <div class="right" @mouseenter="(e)=>enter(e,'b4')" @mouseleave="leave">
+        <div class="show4">
             <a href="#"><h1>Manual</h1></a>
         </div>
     </div>
 </template>
+<script setup>
 
+import router from "@/router/index.js"
+const enter = (e,name)=>{
+  e.target.style.backgroundImage = 'url(' + require('../login/img/'+name+'.png') + ')'
+  e.target.childNodes[0].style.display = 'block'
+}
+const leave = (e)=>{
+  e.target.style.backgroundImage = 'url("")'
+  e.target.childNodes[0].style.display = 'none'
+}
+function jumptologin(){
+    router.push('/login')
+}
+    
+
+
+
+
+
+</script>
 <style>
 *{
     padding: 0;
@@ -254,51 +274,3 @@ h1 {
 
 </style>
 
-<script>
-var navleft = document.getElementById("left")
-var navright = document.getElementById("right")
-var navmidright = document.getElementById("midright")
-var navmidleft = document.getElementById("midleft")
-var show1 = document.getElementById("show1")
-var show2 = document.getElementById("show2")
-var show3 = document.getElementById("show3")
-var show4 = document.getElementById("show4")
-
-navleft.onmouseover = function (){
-   navleft.style.backgroundImage = "url('webpages/login/img/b1.png')"
-   show1.style.display = "block"
-}
-navleft.onmouseout = function (){
-
-   navleft.style.backgroundImage = "url('')"
-   show1.style.display = "none"
-}
-
-navright.onmouseover = function (){
-
-   navright.style.backgroundImage = "url('webpages/login/img/b4.png')"
-   show4.style.display = "block"
-}
-navright.onmouseout = function (){
-   navright.style.backgroundImage = "url('')"
-   show4.style.display = "none"
-}
-navmidright.onmouseover = function (){
-
-   navmidright.style.backgroundImage = "url('webpages/login/img/b3.png')"
-   show3.style.display = "block"
-}
-navmidright.onmouseout = function (){
-   navmidright.style.backgroundImage = "url('')"
-   show3.style.display = "none"
-}
-navmidleft.onmouseover = function (){
-
-   navmidleft.style.backgroundImage = "url('webpages/login/img/b2.png')"
-   show2.style.display = "block"
-}
-navmidleft.onmouseout = function (){
-   navmidleft.style.backgroundImage = "url('')"
-   show2.style.display = "none"
-}
-</script>
