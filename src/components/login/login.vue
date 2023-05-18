@@ -45,8 +45,11 @@
                 message: '登录成功 请稍等...',
                 type: 'success',
               });
+              sessionStorage.setItem("loginstatus",true);
+              sessionStorage.setItem("name",res.data.name);
+              sessionStorage.setItem("userid",res.data.userid);
               this.$router.push({
-                path: '/register'
+                path: '/shopmain'
               })
           } else {
             ElNotification.error({

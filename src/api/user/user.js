@@ -11,4 +11,16 @@ export function login(query) {
     })
 }
 
+export function register(query) {
+    return request({
+        url:'/register',
+        method:'get',
+        params : {
+            name : query.name,
+            username : query.username,
+            password :query.password
+        }
+    })
+}
+
 export default login
