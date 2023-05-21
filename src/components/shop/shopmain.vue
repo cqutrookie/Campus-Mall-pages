@@ -1,14 +1,15 @@
 <template>
   <div class="home">
+    <div class="background"></div>
     <el-header class="header">
       <div class="logo">
         <img src="../shop/img/logo.png" alt="logo" />
         <span class="title">Campus-Mall</span>
       </div>
       <el-menu class="menu" mode="horizontal">
-        <el-menu-item index="1">首页</el-menu-item>
+        <el-menu-item index="1" >首页</el-menu-item>
         <el-menu-item index="2">关于我们</el-menu-item>
-        <el-menu-item index="3">欢迎你{{name}}</el-menu-item>
+        <el-menu-item index="3">欢迎你,{{name}}</el-menu-item>
       </el-menu>
       <el-input
         class="search"
@@ -56,11 +57,27 @@
           </div>
           <div class="product-description">{{ product.commoditydes }}</div>
           <div class="product-actions">
-            <el-button type="primary" size="small" @click="addToCart(product)">加入购物车</el-button>
+            <el-button class="join"  type="primary" size="small" @click="addToCart(product)">加入购物车
+            
+            </el-button>
           </div>
         </el-card>
       </el-col>
     </el-row>
+    <div class="pagination">
+      <button :disabled="pageNum === 1" @click="previousPage">上一页</button>
+      <button
+        v-for="pageNumber in totalPages"
+        :key="pageNumber"
+        :class="{ active: pageNumber === currentPage }"
+        @click="goToPage(pageNumber)"
+      >
+      
+        {{ pageNumber }}
+      </button>
+      <button :disabled="pageNum === totalPages" @click="nextPage">下一页</button>
+    </div>
+    
   </div>
 </template>
 
@@ -88,6 +105,9 @@ export default {
   },
   data() {
     return {
+      pageNum: 1,
+      pageSize: 8,
+      totalPages:2,
       cartItems: [
         {
           merchantid:"",
@@ -116,10 +136,78 @@ export default {
       searchText: '',
     };
   },
-  created() {
-    this.loadingdata();
-  },
+
+
+  
+
   methods: {
+    goToPage(page){
+      if(this.searchText !=''){
+        this.search();
+      }
+      else{
+        this.pageNum = page;
+      this.loadingdata();
+      }
+      
+    },
+    loadingdata(){
+
+      this.name = sessionStorage.getItem("name");
+      var this_=this;
+  
+      var params = {};
+      
+        params.pageNum = this_.pageNum;
+      getcommodities(params).then(res => {
+   
+          if (res.data.CODE === '200') {
+              ElNotification({
+                title: 'Success',
+                message: '请求成功',
+                type: 'success',
+              });
+              this_.products = res.data.page.list;
+              this_.totalPages = res.data.page.pages;
+              console.log(this.pageNum);
+            
+          } else {
+            ElNotification.error({
+              title: '请求失败',
+              message: res.data.msg
+            })
+          }
+        }).catch(res => {
+          ElNotification({
+            title: 'Error',
+            message: '服务器出错',
+            type: 'error',
+          });
+        })
+    },
+    nextPage() {
+      if(this.searchText!=''){
+        this.pageNum += 1;
+        this.search();
+      }
+      else{
+        this.pageNum += 1;
+      
+      this.loadingdata();
+      }
+      
+    },
+    previousPage(){
+      if(this.searchText!=''){
+        this.pageNum -= 1;
+        this.search();
+      }
+      else{
+        this.pageNum -= 1;
+      
+      this.loadingdata();
+      }
+    },
     removeItem(index) {
       var this_ = this;
       // 从购物车中删除商品
@@ -243,7 +331,7 @@ export default {
             });
             this_.cartItems.push(product);
             this_.totalPrice += product.commodityprice;
-        } 
+        }
         else if(res.data.CODE === '201'){
           ElNotification.error({
             title: '不能添加自己出售的商品',
@@ -304,6 +392,8 @@ export default {
       //传入搜索框里面的值给后端
       var params = {};
         params.commodityname=this.searchText;
+        this.pageNum = 1;
+        params.pageNum = this.pageNum;
       getsearch(params).then(res => {
         
         if (res.data.CODE === '200') {
@@ -312,7 +402,8 @@ export default {
               message: '请求成功',
               type: 'success',
             });
-            this_.products = res.data.commodities;
+            this_.products = res.data.commodities.list;
+            this_.totalPages = res.data.commodities.pages;
         } else {
           ElNotification.error({
             title: '请求失败',
@@ -329,33 +420,11 @@ export default {
     },
 
 
-    loadingdata(){
-      var this_=this
-      getcommodities().then(res => {
-        
-          if (res.data.CODE === '200') {
-              ElNotification({
-                title: 'Success',
-                message: '请求成功',
-                type: 'success',
-              });
-              this_.products = res.data.commodities;
-              console.log(res.data.commodities)
-              this_.name = sessionStorage.getItem('name');
-          } else {
-            ElNotification.error({
-              title: '请求失败',
-              message: res.data.msg
-            })
-          }
-        }).catch(res => {
-          ElNotification({
-            title: 'Error',
-            message: '服务器出错',
-            type: 'error',
-          });
-        })
-    }
+
+  },
+  mounted() {
+    console.log(this.pageNum);
+    this.loadingdata();
   },
   filters: {
     formatPrice(price) {
@@ -369,10 +438,91 @@ export default {
       return `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
     },
   },
+
+
 };
 </script>
 
 <style scoped>
+.home {
+  /* add position:relative to enable absolute positioning of the background */
+  position: relative;
+}
+
+.background {
+  /* set the background color and opacity */
+  background-color: #2c2828;
+  opacity: 0.6;
+
+  /* set the position, size, and z-index */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+
+
+}
+.join{
+  background-color: #808080;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: #333;
+  border: 1px solid #222;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px 20px;
+  transition: all 0.2s ease;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #555;
+  border-color: #444;
+}
+
+.pagination button:disabled {
+  background-color: #555;
+  border-color: #444;
+  color: #999;
+  cursor: default;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.pagination button:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.pagination button:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.pagination button:not(:first-child):not(:last-child) {
+  margin-left: -1px;
+}
+
+.home .menu .el-menu-item:nth-child(1) {
+  color: black;
+}
+.home .menu .el-menu-item:nth-child(2) {
+  color: black;
+}
+.home .menu .el-menu-item:nth-child(3) {
+  color: black;
+}
 .cart-container {
   border-radius: 10px; /* 添加圆角边框 */
   position: fixed;
@@ -447,7 +597,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  background-color: #fff;
+  background-color: #808080;
   border-bottom: 1px solid #eee;
   position: fixed;
   top: 0;
@@ -473,12 +623,14 @@ export default {
 }
 .menu {
   border: none;
-  background-color: #fff;
+  background-color: #808080;
   font-size: 16px;
+
 }
 .menu-item {
   margin-left: 20px;
   margin-right: 20px;
+  color: black;
 }
 .submenu {
   background-color: #f2f2f2;
@@ -506,11 +658,23 @@ export default {
   height: 450px;
   overflow: hidden;
   position: relative;
+  margin: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  
+  background-color:hsl(60, 6%, 72%);
+}
+.product-card .el-card:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transform: scale(1.52);
 }
 .product-image {
   width: 100%;
   height: 200px;
   object-fit: cover;
+}
+.product-card .product-image:hover {
+  transform: scale(1.1);
 }
 .product-info {
   padding: 12px;
@@ -551,4 +715,5 @@ export default {
   bottom: 10px;
   right: 10px;
 }
+
 </style>

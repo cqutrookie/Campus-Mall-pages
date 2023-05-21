@@ -3,7 +3,7 @@ import request from "@/api";
 export function login(query) {
     return request({
         url:'/checkUser',
-        method:'get',
+        method:'post',
         params : {
             username : query.username,
             password :query.password

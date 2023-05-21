@@ -4,7 +4,8 @@ export function getsearch(query) {
         url:'/getsearch',
         method:'get',
         params : {
-           commodityname:query.commodityname
+           commodityname:query.commodityname,
+           pageNum : query.pageNum
         }
     })
 }
