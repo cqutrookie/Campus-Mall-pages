@@ -8,7 +8,7 @@
       </div>
       <el-menu class="menu" mode="horizontal">
         <el-menu-item index="1" >首页</el-menu-item>
-        <el-menu-item index="2">关于我们</el-menu-item>
+        <el-menu-item index="2" @click="jumptoAboy">关于我们</el-menu-item>
         <el-menu-item index="3">欢迎你,{{name}}</el-menu-item>
       </el-menu>
       <el-input
@@ -90,6 +90,7 @@ import {addshoppingcart} from '@/api/user/addshoppingcart'
 import {getshoppingcart} from '@/api/user/getshoppingcart'
 import {clearCart} from '@/api/user/clearcart'
 import {deleteone} from '@/api/user/deleteone'
+import router from "@/router";
 export default {
   name: 'Home',
   components: {
@@ -195,7 +196,10 @@ export default {
       
       this.loadingdata();
       }
-      
+
+    },
+    jumptoAboy(){
+      router.push('/AboutUs')
     },
     previousPage(){
       if(this.searchText!=''){

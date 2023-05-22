@@ -7,6 +7,7 @@ import index from '../components/login/index.vue'
 import login from '../components/login/login.vue'
 import register from '../components/login/register.vue'
 import shopmain from '../components/shop/shopmain.vue'
+import AboutUs from '../components/shop/AboutUs.vue'
 /**
  * 定义路由信息
  */
@@ -15,6 +16,10 @@ const routes = [
     path: '/',
     component: index
   },
+    {
+        path: '/AboutUs',
+        component: AboutUs
+    },
   {
     path:'/login',
     component:login,
