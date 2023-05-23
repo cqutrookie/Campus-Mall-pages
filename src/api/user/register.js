@@ -6,7 +6,8 @@ export function register(query) {
         params : {
             name : query.name,
             username : query.username,
-            password :query.password
+            password :query.password,
+            address :query.address
         }
     })
 }

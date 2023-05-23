@@ -7,10 +7,11 @@
         <span class="title">Campus-Mall</span>
       </div>
       <el-menu class="menu" mode="horizontal">
-        <el-menu-item index="1" >首页</el-menu-item>
+        <el-menu-item index="1" @click="jumptoshopmain">首页</el-menu-item>
         <el-menu-item index="2" @click="jumptoAboy">关于我们</el-menu-item>
         <el-menu-item index="3">欢迎你,{{name}}</el-menu-item>
       </el-menu>
+      <el-button class="publish" type="primary" icon="el-icon-plus" size="medium" @click="goToPublish" style="background-color: #808080;">发布商品</el-button>
       <el-input
         class="search"
         placeholder="搜索商品"
@@ -142,6 +143,13 @@ export default {
   
 
   methods: {
+    jumptoshopmain(){
+      router.push('/shopmain');
+    },
+    goToPublish(){
+        router.push('/salecommodity');
+    },
+
     goToPage(page){
       if(this.searchText !=''){
         this.search();
@@ -199,7 +207,7 @@ export default {
 
     },
     jumptoAboy(){
-      router.push('/AboutUs')
+      router.push('/AboutUs');
     },
     previousPage(){
       if(this.searchText!=''){

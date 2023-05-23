@@ -8,6 +8,7 @@ import login from '../components/login/login.vue'
 import register from '../components/login/register.vue'
 import shopmain from '../components/shop/shopmain.vue'
 import AboutUs from '../components/shop/AboutUs.vue'
+import salecommodity from '../components/shop/salecommodity.vue'
 /**
  * 定义路由信息
  */
@@ -32,8 +33,14 @@ const routes = [
   {
     path:'/shopmain',
     component:shopmain,
-    // meta: { requireAuth: true }
+    meta: { requireAuth: true }
+  },
+  {
+    path:'/salecommodity',
+    component:salecommodity,
+    meta: { requireAuth: true},
   }
+
 ]
 
 //创建路由实例

@@ -7,6 +7,8 @@
         <h1>用户注册</h1>
         <label for="username"><i class="el-icon-user-solid" style="color: #c1c1c1"></i></label>
         <input type="text" placeholder="昵称" name="name" id="name" autocapitalize="off" v-model.trim=name aria-autocomplete="off">
+        <label for="address"><i class="el-icon-user-solid" style="color: #c1c1c1"></i></label>
+        <input type="text" placeholder="寝室号" name="address" id="address" autocapitalize="off" v-model.trim=address aria-autocomplete="off">
         <label for="username"><i class="el-icon-user-solid" style="color: #c1c1c1"></i></label>
         <input type="text" placeholder="用户名" name="username" id="username" autocapitalize="off" v-model.trim=username aria-autocomplete="off">
         <label for="password"><i class="el-icon-right" style="color: #c1c1c1"></i></label>
@@ -31,6 +33,7 @@
         name : '',
         username: '',
         password: '',
+        address: '',
       }
     },
     methods: {
@@ -39,7 +42,7 @@
         params.name=this.name;
         params.username=this.username;
         params.password=this.password;
-        
+        params.address = this.address;
         register(params).then(res => {
           console.log(res.data);
           if (res.data.CODE === '01') {
