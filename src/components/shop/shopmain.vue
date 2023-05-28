@@ -29,7 +29,7 @@
         
       </div>
       <div class="cart-content">
-        <div class="cart-item" v-for="(item, index) in cartItems" :key="index">
+        <div class="cart-item"  v-for="(item, index) in cartItems" :key="index">
           <img :src="require('../shop/img/'+item.img)" alt="商品图片" class="item-image" />
           <div class="item-info">
             <div class="item-name">{{ item.commodityname }}</div>
@@ -41,13 +41,13 @@
       </div>
       <div class="cart-footer">
         <div class="total-price">总价：{{ totalPrice }}RMB</div>
-        <el-button type="primary" :disabled="cartItems.length === 0">去结算</el-button>
+        <el-button type="primary" :disabled="cartItems.length === 0" @click="buyit">去结算</el-button>
       </div>
     </div>
     <h1 class="home-title">热门商品</h1>
     <el-row :gutter="20">
-      <el-col v-for="(product, index) in products" :key="index" :xs="24" :sm="12" :md="8" :lg="6">
-        <el-card class="product-card">
+      <el-col v-for="(product, index) in products"  :key="index" :xs="24" :sm="12" :md="8" :lg="6" >
+        <el-card class="product-card" >
           <img :src="require('../shop/img/'+product.img)"  class="product-image" />
           <div class="product-info">
             <div class="product-name-wrapper">
@@ -91,6 +91,7 @@ import {addshoppingcart} from '@/api/user/addshoppingcart'
 import {getshoppingcart} from '@/api/user/getshoppingcart'
 import {clearCart} from '@/api/user/clearcart'
 import {deleteone} from '@/api/user/deleteone'
+import{settlementCart} from '@/api/user/settlementCart'
 import router from "@/router";
 export default {
   name: 'Home',
@@ -119,6 +120,7 @@ export default {
           img: "i1.png",
           creattime: '2022-01-01',
           commodityprice: '商品描述1',
+          status:0,
         }
       ], // 购物车中的商品列表
       totalPrice: 0, // 购物车中商品的总价
@@ -132,6 +134,7 @@ export default {
           img: "i1.png",
           creattime: '2022-01-01',
           commodityprice: '商品描述1',
+          status:0,
         }
       ],
       name:'',
@@ -140,9 +143,80 @@ export default {
   },
 
 
-  
 
   methods: {
+
+    buyit(){
+        //结算逻辑
+        let params = {};
+        params.ids = "";
+
+        for(var i=0;i<this.cartItems.length;i++){
+          params.ids += this.cartItems[i].commodityid+",";
+        }
+        if(this.totalPrice ==0){
+        ElMessageBox.confirm(
+        '购物车是空的,无法结算商品',
+        'Warning',
+        {
+          confirmButtonText: '确定',
+        }
+  )
+    .then(() => {
+      ElMessage({
+        type: 'success',
+        message: 'campus-mall',
+      })
+    })
+      }
+      else{
+//调用接口全部删除购物车里的物品
+          ElMessageBox.confirm(
+    '你确定要结算购物车里的所有商品吗',
+    'Warning',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      
+        //向后端发起请求
+        settlementCart(params).then(res => {
+        
+        if (res.data.CODE === '200') {
+          // 清空购物车
+            ElMessage({
+        type: 'success',
+        message: '成功结算购物车',
+      })
+    
+        } 
+        else if(res.data.CODE === '201'){
+          ElNotification.error({
+            title: '账户余额不足',
+            message: res.data.msg
+          })
+        }
+      }).catch(res => {
+        ElNotification({
+          title: 'Error',
+          message: '服务器出错',
+          type: 'error',
+        });
+      })
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '取消',
+      })
+    })
+  }
+    
+    },
+
     jumptoshopmain(){
       router.push('/shopmain');
     },
@@ -542,7 +616,7 @@ export default {
   right: 0;
   width: 300px;
   height: 100%;
-  background-color: #fff;
+  background-color:#555;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   z-index: 9999;
 }
@@ -673,7 +747,7 @@ export default {
   margin: 10px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-  
+ 
   background-color:hsl(60, 6%, 72%);
 }
 .product-card .el-card:hover {

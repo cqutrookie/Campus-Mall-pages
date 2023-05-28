@@ -89,7 +89,7 @@ export default {
         body: formData
         
       });
-      console.log(response);
+      alert("发布成功");
 
       // 保存上传成功后返回的图片URL
     
