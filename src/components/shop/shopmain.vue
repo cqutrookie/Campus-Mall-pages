@@ -9,7 +9,7 @@
       <el-menu class="menu" mode="horizontal">
         <el-menu-item index="1" @click="jumptoshopmain">首页</el-menu-item>
         <el-menu-item index="2" @click="jumptoAboy">关于我们</el-menu-item>
-        <el-menu-item index="3">欢迎你,{{name}}</el-menu-item>
+        <el-menu-item index="3" @click="jumptoOwn">欢迎你,{{name}}</el-menu-item>
       </el-menu>
       <el-button class="publish" type="primary" icon="el-icon-plus" size="medium" @click="goToPublish" style="background-color: #808080;">发布商品</el-button>
       <el-input
@@ -145,6 +145,9 @@ export default {
 
 
   methods: {
+    jumptoOwn(){
+      router.push("/ownPage");
+    },
 
     buyit(){
         //结算逻辑
@@ -196,6 +199,12 @@ export default {
         else if(res.data.CODE === '201'){
           ElNotification.error({
             title: '账户余额不足',
+            message: res.data.msg
+          })
+        }
+        else if(res.data.CODE === '202'){
+          ElNotification.error({
+            title: '商品'+res.data.commodityname+"已经被其他用户购买了",
             message: res.data.msg
           })
         }

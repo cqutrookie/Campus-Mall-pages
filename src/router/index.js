@@ -9,6 +9,7 @@ import register from '../components/login/register.vue'
 import shopmain from '../components/shop/shopmain.vue'
 import AboutUs from '../components/shop/AboutUs.vue'
 import salecommodity from '../components/shop/salecommodity.vue'
+import ownPage from '../components/shop/ownPage.vue';
 /**
  * 定义路由信息
  */
@@ -39,6 +40,11 @@ const routes = [
     path:'/salecommodity',
     component:salecommodity,
     meta: { requireAuth: true},
+  },
+  {
+    path:'/ownPage',
+    component:ownPage,
+    Math: {requireAuth:true},
   }
 
 ]
