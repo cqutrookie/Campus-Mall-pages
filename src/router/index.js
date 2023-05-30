@@ -10,6 +10,7 @@ import shopmain from '../components/shop/shopmain.vue'
 import AboutUs from '../components/shop/AboutUs.vue'
 import salecommodity from '../components/shop/salecommodity.vue'
 import ownPage from '../components/shop/ownPage.vue';
+import admin from '../components/admin/admin.vue';
 /**
  * 定义路由信息
  */
@@ -45,6 +46,11 @@ const routes = [
     path:'/ownPage',
     component:ownPage,
     Math: {requireAuth:true},
+  },
+  {
+    path:'/admin',
+    component:admin,
+   
   }
 
 ]

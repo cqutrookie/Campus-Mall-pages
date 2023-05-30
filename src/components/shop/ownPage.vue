@@ -69,8 +69,9 @@
                         </div>
                         <div class="container-bottom">
                             <div class="container-foot-rr">
-                                <button type="text" class="btn" @click="confirmCommodity(index)" v-if="order.status == 0">确认收货</button>
+                                <button type="text" class="btn" @click="confirmCommodity(index)" v-if="order.status == 1">确认收货</button>
                                 <span v-if="order.status == 2">已收货</span>
+                                <span v-if="order.status == 0">平台正在发货</span>
                             </div>
                         </div>
                     </div>

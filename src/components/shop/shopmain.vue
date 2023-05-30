@@ -204,7 +204,13 @@ export default {
         }
         else if(res.data.CODE === '202'){
           ElNotification.error({
-            title: '商品'+res.data.commodityname+"已经被其他用户购买了",
+            title: '商品'+res.data.commodityname+"已经被其他用户购买了请在购物车删除",
+            message: res.data.msg
+          })
+        }
+        else if(res.data.CODE === '204'){
+          ElNotification.error({
+            title: '商品'+res.data.commodityname+"已经被管理员下架请在购物车删除",
             message: res.data.msg
           })
         }

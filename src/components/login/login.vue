@@ -53,14 +53,14 @@
               })
           } else {
             ElNotification.error({
-              title: '用户名或者密码错误',
+              title: '用户名或者密码错误，或者用户被管理员禁用',
               message: res.data.msg
             })
           }
         }).catch(res => {
           ElNotification({
             title: 'Error',
-            message: '用户名或者密码错误',
+            message: '用户名或者密码错误,或者用户被管理员禁用',
             type: 'error',
           });
         })
